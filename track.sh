@@ -23,4 +23,4 @@ then
 fi
 
 # Reschedule to twelve hours
-echo "$0" "$USER" "$PROJECT" | at now + 12 hour
+echo "$0" "$USER" "$PROJECT" | at now + 12 hours
