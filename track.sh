@@ -11,7 +11,7 @@ then
 fi
 
 DATE=$( date "+%Y-%m-%d-%H-%M" )
-FILE_NAME="${DATE}_${USER}_${PROJECT}"
+FILE_NAME="${DATE}_${USER}_${PROJECT}.json"
 
 # Download stargazers data
 # FIXME handle pagination https://developer.github.com/v3/#pagination
