@@ -11,19 +11,43 @@ then
 fi
 
 DATE=$( date "+%Y-%m-%d-%H-%M" )
-FILE_NAME="${DATE}_${USER}_${PROJECT}.json"
+FILE_NAME="data/${DATE}-${USER}-${PROJECT}.json"
 
 # Download stargazers data
 # FIXME handle pagination https://developer.github.com/v3/#pagination
-curl "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=100" > "data/$FILE_NAME"
+curl --silent "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=100" > "$FILE_NAME"
 # The easiest is to create a couple of requests just in case
-# curl "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=100&page=2" >> "data/$FILE_NAME"
+# curl "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=100&page=2" >> "$FILE_NAME"
 
 if [ $? -ne 0 ]
 then
   echo "Error retrieving stargazers data" >&2
   exit 1
 fi
+
+# Print summary
+function summary()
+{
+  local COUNT=$( cat "$FILE_NAME" | sed -n '/login/p' | wc -l | xargs printf )
+  local PREVIOUS=data/$( ls -1r data/ | head -n2 | tail -n1 )
+
+  echo "SUMMARY:"
+  echo
+  echo "Stargazers count: $COUNT"
+  echo "File: $FILE_NAME"
+
+  if [ $PREVIOUS ]
+  then
+    if [ "`md5 -q $PREVIOUS`" != "`md5 -q $FILE_NAME`" ]
+    then
+      echo ">> There are changes! <<"
+    fi
+  fi
+
+  echo "---------------------"
+}
+
+summary
 
 # Reschedule to twelve hours
 echo "$0" "$USER" "$PROJECT" | at now + 12 hours

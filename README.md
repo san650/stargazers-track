@@ -22,6 +22,9 @@ $ ./track.sh san650 stargazers-track
 Where the first parameter is the name of the user owning the project and the
 second parameter is the name of the project.
 
+After the script is run (by `at` command) an email is sent to the user (UNIX
+mail).
+
 ## Prerequisites
 
 This project depends on the following utilities
