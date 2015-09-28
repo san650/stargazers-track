@@ -19,13 +19,6 @@ curl --silent "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=1
 # The easiest is to create a couple of requests just in case
 # curl "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=100&page=2" >> "$FILE_NAME"
 
-if [[ $? -ne 0 ]]
-then
-  echo "Error retrieving stargazers data" >&2
-  exit 1
-fi
-
-# Print summary
 function summary()
 {
   local COUNT=$( cat "$FILE_NAME" | sed -n '/login/p' | wc -l | xargs printf )
@@ -44,7 +37,18 @@ function summary()
   echo "---------------------"
 }
 
-summary
+function schedule()
+{
+  # Reschedule to twelve hours
+  echo "$0" "$USER" "$PROJECT" | at now + 12 hours
+}
 
-# Reschedule to twelve hours
-echo "$0" "$USER" "$PROJECT" | at now + 12 hours
+if [[ $? -ne 0 ]]
+then
+  echo "Error retrieving stargazers data. curl error code $?" >&2
+  schedule "$0"
+  exit 1
+else
+  summary
+  schedule "$0"
+fi

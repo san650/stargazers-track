@@ -35,6 +35,9 @@ This project depends on the following utilities
 Please be sure that both utilities are available on the system and that `at`
 daemon is up and running (and that your user has permissions to use it).
 
+On OSX see `man atrun` to have more information about how to enable the `atrun`
+service.
+
 ## License
 
 stargazers-track is licensed under the MIT license.
