@@ -28,6 +28,14 @@ def fragment(user, klass = "")
   EOT
 end
 
+user = ARGV[0]
+project = ARGV[1]
+
+unless user && project
+  puts "Usage: ./shortlog.rb san650 ember-cli-page-object"
+  exit 1
+end
+
 before = []
 current = []
 diff = []
@@ -35,7 +43,7 @@ deleted = []
 
 puts head
 
-Dir["data/*.json"].sort.each do |file|
+Dir["data/*-#{user}-#{project}.json"].sort.each do |file|
   current = []
 
   JSON.parse(File.read(file)).each do |user|
