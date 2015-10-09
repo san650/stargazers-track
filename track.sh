@@ -22,7 +22,7 @@ curl --silent "https://api.github.com/repos/$USER/$PROJECT/stargazers?per_page=1
 function summary()
 {
   local COUNT=$( cat "$FILE_NAME" | sed -n '/login/p' | wc -l | xargs printf )
-  local PREVIOUS=data/$( ls -1r data/ | head -n2 | tail -n1 )
+  local PREVIOUS=data/$( ls -1r data/*-${USER}-${PROJECT}.json | head -n2 | tail -n1 )
 
   echo "SUMMARY:"
   echo
